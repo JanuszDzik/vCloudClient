@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <th:block th:include="fragments/header :: head"><</th:block>
+</head>
+<style>
+    table, th, td {
+        border: 1px solid orange;
+    }
+    th, td {
+        padding: 10px;
+    }
+</style>
+<body>
+<div class="container">
+
+    <table style="width:100%">
+    <tr>
+        <th>Host</th>
+        <th>ID</th>
+        <th>User</th>
+    </tr>
+    <tr th:each="singleProvider : ${providers}">
+        <td th:text="${singleProvider.getHost()}"/>
+        <td th:text="${singleProvider.getId()}"/>
+        <td th:text="${singleProvider.getUser()}"/>
+    </tr>
+    </table>
+
+    <form th:action="@{/}" th:method="get">
+        <button type="submit" id="submitButton">Back</button>
+    </form>
+    <br>
+</div>
+</body>
+</html>

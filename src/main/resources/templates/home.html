@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <th:block th:include="fragments/header :: head"><</th:block>
+</head>
+<body>
+<div class="container">
+
+    <h3 th:text="${homeTitle}" />
+    <br>
+    <a th:href="@{/ListProviders}">List All Providers</a>
+    <br>
+    <a th:href="@{/ListVms}">List all VMs</a>
+    <br>
+
+</div>
+</body>
+</html>
