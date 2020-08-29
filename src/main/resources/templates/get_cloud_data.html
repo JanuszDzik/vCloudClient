@@ -15,7 +15,7 @@
             <tr th:each="provider, itemStat : *{providers}">
                 <td th:text="*{providers[__${itemStat.index}__].id}"/>
                 <td>
-                    <input th:field="*{providers[__${itemStat.index}__].password}" type="text"/>
+                    <input th:field="*{providers[__${itemStat.index}__].password}" type="password"/>
                 </td>
             </tr>
         </table>

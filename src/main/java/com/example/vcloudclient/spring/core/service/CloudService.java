@@ -23,12 +23,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -47,6 +42,10 @@ public class CloudService {
 
     public void setCloudProviders(List<CloudProviderDto> cloudProviders) {
         this.cloudProviders = cloudProviders;
+    }
+
+    public List<CloudProviderDto> getCloudProviders() {
+        return cloudProviders;
     }
 
     @Autowired
@@ -90,14 +89,13 @@ public class CloudService {
         return forEntity.getHeaders().getFirst("X-VMWARE-VCLOUD-ACCESS-TOKEN");
     }
 
-    public void getVmsFromVcloud(String providerId, String vcloudToken) throws ParserConfigurationException {
+    public void getVmsFromVcloud(String providerId, String vcloudToken) {
         List<ClientHttpRequestInterceptor> interceptors = new ArrayList<>();
         interceptors.add(new HttpHeaderInterceptor("Accept", "application/*+xml;version=33.0"));
         interceptors.add(new HttpHeaderInterceptor("Authorization", "Bearer " + vcloudToken));
         restTemplate.setInterceptors(interceptors);
         final ResponseEntity<String> forEntity = restTemplate.getForEntity(cloudProviderRepository.findById(providerId).get().getHost() +
                 "/api/query?type=vm&isVAppTemplate=false", String.class);
-        //System.out.println("External service returned: " + forEntity.getBody());
         Document doc = convertStringToXMLDocument(forEntity.getBody());
         doc.getDocumentElement().normalize();
         NodeList nodeList = doc.getElementsByTagName("VMRecord");
@@ -122,15 +120,13 @@ public class CloudService {
         }
     }
 
-    public void getEdgesFromVcloud(String providerId, String vcloudToken) throws ParserConfigurationException {
+    public void getEdgesFromVcloud(String providerId, String vcloudToken) {
         List<ClientHttpRequestInterceptor> interceptors = new ArrayList<>();
         interceptors.add(new HttpHeaderInterceptor("Accept", "application/*+xml;version=33.0"));
         interceptors.add(new HttpHeaderInterceptor("Authorization", "Bearer " + vcloudToken));
         restTemplate.setInterceptors(interceptors);
         final ResponseEntity<String> forEntity = restTemplate.getForEntity(cloudProviderRepository.findById(providerId).get().getHost() +
                 "/api/query?type=edgeGateway&format=idrecords", String.class);
-        System.out.println("RETURN:");
-        System.out.println("External service returned: " + forEntity.getBody());
         Document doc = convertStringToXMLDocument(forEntity.getBody());
         doc.getDocumentElement().normalize();
         NodeList nodeList = doc.getElementsByTagName("EdgeGatewayRecord");
@@ -152,7 +148,7 @@ public class CloudService {
         }
     }
 
-    public String getVmConsoleTicket(String id, String vcloudToken) throws ParserConfigurationException {
+    public String getVmConsoleTicket(String id, String vcloudToken) {
         List<ClientHttpRequestInterceptor> interceptors = new ArrayList<>();
         interceptors.add(new HttpHeaderInterceptor("Accept", "application/*+xml;version=33.0"));
         interceptors.add(new HttpHeaderInterceptor("Authorization", "Bearer " + vcloudToken));
@@ -166,7 +162,7 @@ public class CloudService {
     }
 
     @Scheduled(fixedRate = 1500000)
-    public void getAllCloudData() throws ParserConfigurationException {
+    public void getAllCloudData() {
         if (cloudProviders != null) {
             for (CloudProviderDto provider: cloudProviders) {
                 provider.setToken(getVcloudApiToken(provider.getId(), provider.getPassword()));
@@ -175,8 +171,6 @@ public class CloudService {
             }
         }
     }
-
-
 
     public List<VmDto> listAllVms() {
         return vmRepository.findAll().stream().map(VmConverter::mapToDto).collect(Collectors.toList());
@@ -190,12 +184,12 @@ public class CloudService {
         return cloudProviderRepository.findAll().stream().map(CloudProviderConverter::mapToDto).collect(Collectors.toList());
     }
 
-    public String getVmConsoleUrl(String id) throws ParserConfigurationException {
+    public String getVmConsoleUrl(String id) {
         String providerId = vmRepository.findById(id).get().getProviderId();
         return cloudProviderRepository.findById(providerId).get().getHost().replace("https://vcloud.exea.pl","wss://rc.exea.pl:443") + "/902;" + getVmConsoleTicket(id, getToken(providerId));
     }
 
-    public void doVmPowerAction(String id, String powerAction) throws ParserConfigurationException {
+    public void doVmPowerAction(String id, String powerAction) {
         String providerId = vmRepository.findById(id).get().getProviderId();
         String vmPowerActionUrl = cloudProviderRepository.findById(providerId).get().getHost() + "/api/vApp/" + id + "/power/action/" + powerAction;
         List<ClientHttpRequestInterceptor> interceptors = new ArrayList<>();
@@ -218,4 +212,6 @@ public class CloudService {
     public boolean noProviderPresent() {
         return cloudProviderRepository.count() == 0;
     }
+
+    public boolean passwordsEntered() { return cloudProviders != null; }
 }

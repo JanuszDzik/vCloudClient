@@ -37,6 +37,8 @@ public class CloudController {
         return ResponseEntity.ok().body(allEdgeGateways);
     }
 
+    // UI endpoints to get vCloud data
+
     @GetMapping("/cloud/api/vms")
     public ResponseEntity<Object> getProviderVms(@RequestParam(value = "providerId") String providerId, @RequestParam(value = "providerPassword") String providerPassword) throws ParserConfigurationException {
         cloudService.getVmsFromVcloud(providerId, cloudService.getVcloudApiToken(providerId, providerPassword));
@@ -55,9 +57,9 @@ public class CloudController {
 
     @GetMapping("/home")
     public ModelAndView init(ModelAndView modelAndView){
-        final String homeTitle = "vCloud Client";
+        String buttonName = (cloudService.passwordsEntered() ? "Reload vCloud Data" : "Get vCloud Data");
         modelAndView.setViewName("home");
-        modelAndView.addObject("homeTitle", homeTitle);
+        modelAndView.addObject("buttonName", buttonName);
         return modelAndView;
     }
 
@@ -95,11 +97,25 @@ public class CloudController {
             modelAndView.setViewName("add_vcloud_provider");
             modelAndView.addObject("cloudProvider", new CloudProviderDto());
         } else {
-            modelAndView.setViewName("get_cloud_data");
-            modelAndView.addObject("form", new VcloudProviderWrapperDto(cloudService.listAllCloudProviders()));
+            if (cloudService.passwordsEntered()){
+                final String buttonName = "Reload vCloud Data";
+                cloudService.getAllCloudData();
+                modelAndView.setViewName("home");
+                modelAndView.addObject("buttonName", buttonName);
+            } else {
+                modelAndView.setViewName("get_cloud_data");
+                modelAndView.addObject("form", new VcloudProviderWrapperDto(cloudService.listAllCloudProviders()));
+            }
         }
         return modelAndView;
     }
+
+/*    @GetMapping("reload")
+    public ModelAndView ReloadCludData(ModelAndView modelAndView) {
+        cloudService.getAllCloudData();
+        modelAndView.setViewName("home");
+        return modelAndView;
+    }*/
 
     @GetMapping("/GetCloudData")
     public ModelAndView GetCloudData(@ModelAttribute VcloudProviderWrapperDto form, ModelAndView modelAndView) throws ParserConfigurationException {
@@ -107,9 +123,11 @@ public class CloudController {
         for (int j=0; j<form.getProviders().size(); j++){
             cloudProviders.get(j).setPassword(form.getProviders().get(j).getPassword());
         }
+        final String buttonName = "Reload vCloud Data";
         cloudService.setCloudProviders(cloudProviders);
         cloudService.getAllCloudData();
         modelAndView.setViewName("home");
+        modelAndView.addObject("buttonName", buttonName);
         return modelAndView;
     }
 
