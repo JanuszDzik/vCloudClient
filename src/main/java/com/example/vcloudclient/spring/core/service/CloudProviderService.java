@@ -27,4 +27,10 @@ public class CloudProviderService {
         cloudProviderRepository.save(cloudProvider);
     }
 
+    public void deleteCloudProvider(String id) {
+        cloudProviderRepository.deleteById(id);
+    }
+
+
+
 }

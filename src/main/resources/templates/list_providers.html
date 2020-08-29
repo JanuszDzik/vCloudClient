@@ -3,18 +3,11 @@
 <head>
     <th:block th:include="fragments/header :: head"><</th:block>
 </head>
-<style>
-    table, th, td {
-        border: 1px solid orange;
-    }
-    th, td {
-        padding: 10px;
-    }
-</style>
+
 <body>
 <div class="container">
 
-    <table style="width:100%">
+    <table class="table table-striped">
     <tr>
         <th>Host</th>
         <th>ID</th>
@@ -24,11 +17,20 @@
         <td th:text="${singleProvider.getHost()}"/>
         <td th:text="${singleProvider.getId()}"/>
         <td th:text="${singleProvider.getUser()}"/>
+        <td>
+            <a class="btn btn-primary" th:href="@{/cloud-provider/delete/__(${singleProvider.getId()})__}" role="button">Delete</a>
+        </td>
     </tr>
     </table>
 
-    <form th:action="@{/}" th:method="get">
-        <button type="submit" id="submitButton">Back</button>
+    <br>
+    <form th:action="@{/AddProvider}" th:method="get">
+        <button class="btn btn-primary" style="float: left" role="button">Add vCloud Provider</button>
+    </form>
+    <br>
+    <br>
+    <form th:action="@{/home}" th:method="get">
+        <button class="btn btn-secondary" style="float: right" role="button">Back</button>
     </form>
     <br>
 </div>

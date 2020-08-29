@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <th:block th:include="fragments/header :: head"><</th:block>
+</head>
+<body>
+<form th:action="@{/cloud-provider/create(${cloudProvider})}" th:object="${cloudProvider}" method="post" cssClass="form"  style="width: 50%; padding-left: 50px; padding-top: 50px";>
+    <div class="form-group">
+        <label for="Host">Name</label>
+        <input type="text" th:field="*{host}" id="host" placeholder="Host" class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="id">ID (organization)</label>
+        <input type="text" th:field="*{id}" id="id" placeholder="ID" class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="user">User name</label>
+        <input type="text" th:field="*{user}" id="user" placeholder="User" class="form-control">
+    </div>
+    <br><br>
+    <button class="btn btn-primary" style="float: left" role="button" type="submit">Add</button>
+</form>
+<form th:action="@{/home}" th:method="get">
+    <button class="btn btn-secondary" style="float: right" role="button">Back</button>
+</form>
+</body>
+</html>

@@ -1,22 +1,18 @@
 package com.example.vcloudclient.spring.core.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Id;
-
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CloudProviderDto {
-    @Id
+public class EdgeGatewayDto {
     private String id;
-    private String host;
-    private String user;
-    private String password;
-    private String token;
+    private String name;
+    private String orgName;
+    private String orgVdcName;
+    private String providerId;
 }

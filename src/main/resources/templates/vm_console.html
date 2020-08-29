@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <th:block th:include="fragments/header :: head"><</th:block>
+</head>
+
+<body>
+<link rel="stylesheet" type="text/css" th:href="@{/css/wmks-all.css}" />
+<script type="text/javascript" src="http://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+<script type="text/javascript" th:src="@{/js/wmks.min.js}"></script>
+<div id="wmksContainer" style="position:absolute;width:100%;height:100%"></div>
+<script>
+    var wmks = WMKS.createWMKS("wmksContainer",{})
+        .register(WMKS.CONST.Events.CONNECTION_STATE_CHANGE, function(event,data){
+            if(data.state == WMKS.CONST.ConnectionState.CONNECTED){
+                console.log("connection state change : connected");}
+        });
+    var url = "[[${consoleUrl}]]";
+    wmks.connect(url);
+</script>
+</body>
+</html>

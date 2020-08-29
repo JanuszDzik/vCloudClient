@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <th:block th:include="fragments/header :: head"><</th:block>
+</head>
+
+<body>
+<div class="container">
+
+    <table class="table table-striped">
+    <tr>
+        <th>Edge Name</th>
+        <th>Organization</th>
+        <th>Organization VDC</th>
+        <th>Provider ID</th>
+    </tr>
+    <tr th:each="singleEdge : ${edgegateways}">
+        <td th:text="${singleEdge.getName()}"/>
+        <td th:text="${singleEdge.getOrgName()}"/>
+        <td th:text="${singleEdge.getOrgVdcName()}"/>
+        <td th:text="${singleEdge.getProviderId()}"/>
+    </tr>
+    </table>
+
+    <br>
+    <form th:action="@{/home}" th:method="get">
+        <button class="btn btn-secondary" style="float: right" role="button">Back</button>
+    </form>
+    <br>
+</div>
+</body>
+</html>

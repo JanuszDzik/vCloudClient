@@ -9,6 +9,8 @@ public class CloudProviderConverter {
                 .id(cloudProvider.getId())
                 .host(cloudProvider.getHost())
                 .user(cloudProvider.getUser())
+                .password("")
+                .token("")
                 .build();
     }
 

@@ -1,0 +1,21 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light" xmlns:th="http://www.thymeleaf.org">
+
+    <a class="navbar-brand" href="#">vCloud Client</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav  mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/ListProviders}">vCloud Providers</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/ListVms}">Virtual Machines</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/ListEdgeGateways}">Edge Gateways</a>
+            </li>
+        </ul>
+    </div>
+</nav>

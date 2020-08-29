@@ -18,6 +18,7 @@ public class VmConverter {
 
     public static Vm mapFromDto(VmDto vm) {
         return Vm.builder()
+                .id(vm.getId())
                 .name(vm.getName())
                 .vappName(vm.getVappName())
                 .guestOs(vm.getGuestOs())

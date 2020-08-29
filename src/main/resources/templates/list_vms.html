@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <th:block th:include="fragments/header :: head"><</th:block>
+</head>
+
+<body>
+<div class="container">
+
+    <table class="table table-striped">
+    <tr>
+        <th>VM Name</th>
+        <th>Guest OS</th>
+        <th>ON/OFF</th>
+        <th>Provider ID</th>
+    </tr>
+    <tr th:each="singleVm : ${vms}">
+        <td th:text="${singleVm.getName()}"/>
+        <td th:text="${singleVm.getGuestOs()}"/>
+        <td th:text="${singleVm.getStatus()}"/>
+        <td th:text="${singleVm.getProviderId()}"/>
+        <td th:if="${singleVm.getStatus() == 'POWERED_ON'}">
+            <a class="btn btn-primary" th:href="@{/vm-poweroff/__(${singleVm.getId()})__}" role="button">Power Off</a>
+        </td>
+        <td th:if="${singleVm.getStatus() == 'POWERED_ON'}">
+            <a class="btn btn-primary" th:href="@{/vm-shutdown/__(${singleVm.getId()})__}" role="button">Shutdown</a>
+        </td>
+        <td th:if="${singleVm.getStatus() == 'POWERED_ON'}">
+            <a class="btn btn-primary" th:href="@{/vm-console/__(${singleVm.getId()})__}" role="button">Console</a>
+        </td>
+        <td th:if="${singleVm.getStatus() == 'POWERED_OFF'}">
+            <a class="btn btn-primary" th:href="@{/vm-poweron/__(${singleVm.getId()})__}" role="button">Power On</a>
+        </td>
+    </tr>
+    </table>
+
+    <br>
+    <form th:action="@{/home}" th:method="get">
+        <button class="btn btn-secondary" style="float: right" role="button">Back</button>
+    </form>
+    <br><br>
+</div>
+</body>
+</html>
